@@ -4,6 +4,7 @@ public class SeatDTO {
     private Long id;
     private String name;
     private Boolean status;
+    private String seatType;
     private Integer price;
     private BusDTO bus;
 
@@ -13,17 +14,10 @@ public class SeatDTO {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", status=" + status +
+                ", seatType='" + seatType + '\'' +
                 ", price=" + price +
                 ", bus=" + bus +
                 '}';
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -40,6 +34,14 @@ public class SeatDTO {
 
     public void setStatus(Boolean status) {
         this.status = status;
+    }
+
+    public String getSeatType() {
+        return seatType;
+    }
+
+    public void setSeatType(String seatType) {
+        this.seatType = seatType;
     }
 
     public Integer getPrice() {

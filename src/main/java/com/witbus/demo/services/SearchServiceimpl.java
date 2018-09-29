@@ -5,6 +5,7 @@ import com.witbus.demo.dao.repository.*;
 import com.witbus.demo.dto.BusDTO;
 import com.witbus.demo.dto.BusSeatDTO;
 import com.witbus.demo.dto.TourDTO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -12,36 +13,35 @@ import java.util.List;
 
 @Service
 public class SearchServiceimpl implements SearchService {
-    private BusRepository busRepository;
-    private BusOwnerRepository busOwnerRepository;
-    private SeatRepository seatRepository;
-    private BookingRepository bookingRepository;
-    private UserRepository userRepository;
+   @Autowired
 
-    public SearchServiceimpl(BusOwnerRepository busOwnerRepository, SeatRepository seatRepository, BookingRepository bookingRepository, UserRepository userRepository) {
-        this.busOwnerRepository = busOwnerRepository;
+    private SeatRepository seatRepository;
+
+
+    public SearchServiceimpl(SeatRepository seatRepository) {
         this.seatRepository = seatRepository;
-        this.bookingRepository = bookingRepository;
-        this.userRepository = userRepository;
     }
 
     @Override
     public List<BusSeatDTO> searchTour(TourDTO tourDTO) {
-         List<Seat> seats = seatRepository.getSeatAvailable(false,tourDTO.getTicketType());
+         List<Seat> seats = seatRepository.getSeatAvailable(true,tourDTO.getTicketType());
          List<BusSeatDTO> result = new ArrayList<>();
             for (Seat seat :seats) {
 
-                //Check Bus exist
+                //Kiem tra thu bus da ton tai chua
                 int index = -1 ;
                 for (int i = 0 ; i<result.size();i++) {
                     if(result.get(i).getBus().getId().equals(seat.getBus().getId())){
                     index = i;
-                    break;
+
                     }
+                    break;
                 }
-                //Check Bus exist
-                //If index == -1 => add new ,index!=> update (thêm ghế vào xe )
-               if (index !=-1) {
+
+                //If index == -1 => add new ,index!=-1 => update (thêm ghế vào xe )
+
+               if (index >=0) {
+                    if(seat.getBus().getOrigin().equals(tourDTO.getLocationOrigin())){
                    BusSeatDTO busSeatDTO = new BusSeatDTO();
                    BusDTO busDTO = new BusDTO();
                    busDTO.setId(seat.getBus().getId());
@@ -51,7 +51,8 @@ public class SearchServiceimpl implements SearchService {
                    listSeat.add(seat.getId());
                    busSeatDTO.setSeats(listSeat);
                    result.add(busSeatDTO);
-               }
+                    }
+                }
                else {
                     result.get(index).getSeats().add(seat.getId());
                }

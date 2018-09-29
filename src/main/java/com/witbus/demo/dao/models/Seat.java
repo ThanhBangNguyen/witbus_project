@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.util.Set;
 
 @Entity
-@Table(name = "seats")
+@Table(name = "seats" ,schema = "targetSchemaName")
 public class Seat implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,7 +19,8 @@ public class Seat implements Serializable {
     @Column(name = "seat_status")
     private Boolean status;
 
-
+    @Column(name = "seat_type")
+    private String seatType;
 
     @Column(name = "seat_price")
 
@@ -31,6 +32,19 @@ public class Seat implements Serializable {
 
     @OneToMany(mappedBy = "seat", fetch = FetchType.EAGER)
     private Set<Booking> bookings;
+
+    @Override
+    public String toString() {
+        return "Seat{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", status=" + status +
+                ", seatType='" + seatType + '\'' +
+                ", price=" + price +
+                ", bus=" + bus +
+                ", bookings=" + bookings +
+                '}';
+    }
 
     public Long getId() {
         return id;
@@ -54,6 +68,14 @@ public class Seat implements Serializable {
 
     public void setStatus(Boolean status) {
         this.status = status;
+    }
+
+    public String getSeatType() {
+        return seatType;
+    }
+
+    public void setSeatType(String seatType) {
+        this.seatType = seatType;
     }
 
     public Integer getPrice() {
