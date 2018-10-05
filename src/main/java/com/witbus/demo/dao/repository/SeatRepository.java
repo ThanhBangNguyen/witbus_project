@@ -9,6 +9,6 @@ import java.util.List;
 
 @Repository
 public interface SeatRepository extends JpaRepository<Seat, Long> {
-    @Query(value = "SELECT * from  seats where seat_status = ?1 AND seat_type  =?2",nativeQuery = true)
+    @Query(value = "SELECT * from  seats where seat_status = ?1 AND seat_type IN  =?2",nativeQuery = true)
     List<Seat> getSeatAvailable (Boolean status, List<String> seatType);
 }
